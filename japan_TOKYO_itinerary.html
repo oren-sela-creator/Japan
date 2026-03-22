@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tokyo Itinerary</title>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;600;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #1a1208;
+    --paper: #f5f0e8;
+    --red: #c0392b;
+    --gold: #c9a84c;
+    --muted: #8a7f70;
+    --light: #ede8dc;
+    --white: #fdfaf5;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+  }
+
+  /* Noise texture overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.5;
+  }
+
+  /* HERO */
+  header {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 4rem 2rem;
+    overflow: hidden;
+    background: var(--ink);
+  }
+
+  .hero-kanji {
+    position: absolute;
+    font-family: 'Shippori Mincho', serif;
+    font-size: clamp(18rem, 40vw, 36rem);
+    color: rgba(255,255,255,0.03);
+    line-height: 1;
+    pointer-events: none;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    white-space: nowrap;
+  }
+
+  .hero-stripe {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 6px;
+    background: var(--red);
+  }
+
+  .hero-content {
+    position: relative;
+    text-align: center;
+    animation: fadeUp 1s ease both;
+  }
+
+  .hero-eyebrow {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.4em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+  }
+
+  h1 {
+    font-family: 'Shippori Mincho', serif;
+    font-size: clamp(3.5rem, 10vw, 8rem);
+    font-weight: 800;
+    color: var(--white);
+    line-height: 0.9;
+    margin-bottom: 1.5rem;
+    letter-spacing: -0.02em;
+  }
+
+  h1 span {
+    color: var(--red);
+  }
+
+  .hero-sub {
+    font-size: 1rem;
+    color: rgba(255,255,255,0.45);
+    letter-spacing: 0.05em;
+    max-width: 400px;
+  }
+
+  .hero-days {
+    display: flex;
+    gap: 0.4rem;
+    margin-top: 3rem;
+    justify-content: center;
+  }
+
+  .hero-day-pill {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: rgba(255,255,255,0.5);
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    padding: 0.35rem 0.8rem;
+    border-radius: 100px;
+    text-transform: uppercase;
+  }
+
+  /* SCROLL INDICATOR */
+  .scroll-hint {
+    position: absolute;
+    bottom: 2.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    color: rgba(255,255,255,0.25);
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    animation: fadeUp 1.5s 0.5s ease both;
+  }
+
+  .scroll-line {
+    width: 1px;
+    height: 40px;
+    background: linear-gradient(to bottom, rgba(255,255,255,0.25), transparent);
+    animation: scrollDown 1.5s infinite;
+  }
+
+  @keyframes scrollDown {
+    0% { transform: scaleY(0); transform-origin: top; opacity: 1; }
+    50% { transform: scaleY(1); transform-origin: top; opacity: 1; }
+    100% { transform: scaleY(1); transform-origin: bottom; opacity: 0; }
+  }
+
+  /* DAYS SECTION */
+  main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 5rem 2rem;
+  }
+
+  .day-block {
+    margin-bottom: 5rem;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .day-block.visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  .day-header {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: end;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    padding-bottom: 1.2rem;
+    border-bottom: 1px solid rgba(0,0,0,0.12);
+  }
+
+  .day-number {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 5rem;
+    font-weight: 800;
+    color: var(--red);
+    line-height: 1;
+    letter-spacing: -0.04em;
+  }
+
+  .day-info { }
+
+  .day-label {
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 0.2rem;
+  }
+
+  .day-title {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.2;
+  }
+
+  .map-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--ink);
+    color: var(--white);
+    text-decoration: none;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 0.7rem 1.2rem;
+    border-radius: 2px;
+    transition: background 0.2s, color 0.2s;
+    white-space: nowrap;
+  }
+
+  .map-btn:hover {
+    background: var(--red);
+  }
+
+  .map-btn svg {
+    flex-shrink: 0;
+  }
+
+  /* STOPS */
+  .stops {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1px;
+    background: rgba(0,0,0,0.08);
+    border: 1px solid rgba(0,0,0,0.08);
+  }
+
+  .stop {
+    background: var(--white);
+    padding: 1.4rem 1.6rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    transition: background 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .stop:hover {
+    background: var(--light);
+  }
+
+  .stop-index {
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .stop-name {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.3;
+  }
+
+  .stop-type {
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .stop-dot {
+    position: absolute;
+    top: 1.4rem;
+    right: 1.4rem;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+  }
+
+  a.stop {
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+  }
+
+  a.stop::after {
+    content: '↗';
+    position: absolute;
+    bottom: 1rem;
+    right: 1.2rem;
+    font-size: 0.7rem;
+    color: var(--muted);
+    opacity: 0;
+    transform: translate(-3px, 3px);
+    transition: opacity 0.2s, transform 0.2s;
+  }
+
+  a.stop:hover::after {
+    opacity: 1;
+    transform: translate(0, 0);
+  }
+
+  a.stop:hover .stop-name {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    text-decoration-color: var(--red);
+  }
+
+  .dot-food { background: var(--red); }
+  .dot-shopping { background: var(--gold); }
+  .dot-attraction { background: #4a9a8c; }
+  .dot-district { background: var(--muted); }
+
+  .legend {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+    flex-wrap: wrap;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .legend-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--ink);
+    color: rgba(255,255,255,0.3);
+    text-align: center;
+    padding: 2.5rem;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  footer strong {
+    color: var(--gold);
+    font-weight: 400;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 600px) {
+    .day-header { grid-template-columns: auto 1fr; }
+    .map-btn { grid-column: 1 / -1; justify-self: start; }
+    .day-number { font-size: 3.5rem; }
+    .day-title { font-size: 1.4rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="hero-stripe"></div>
+  <div class="hero-kanji">東京</div>
+  <div class="hero-content">
+    <p class="hero-eyebrow">6-Day Journey · Starting from Shinjuku</p>
+    <h1>Tokyo<br><span>旅程</span></h1>
+    <p class="hero-sub">A curated journey through the streets, flavours, and spirit of Tokyo</p>
+    <div class="hero-days">
+      <span class="hero-day-pill">Harajuku</span>
+      <span class="hero-day-pill">Shibuya</span>
+      <span class="hero-day-pill">Shinjuku</span>
+      <span class="hero-day-pill">Asakusa</span>
+      <span class="hero-day-pill">Akihabara</span>
+      <span class="hero-day-pill">Ginza</span>
+    </div>
+  </div>
+  <div class="scroll-hint">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</header>
+
+<main>
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot dot-food"></div> Food &amp; Drink</div>
+    <div class="legend-item"><div class="legend-dot dot-shopping"></div> Shopping</div>
+    <div class="legend-item"><div class="legend-dot dot-attraction"></div> Attraction</div>
+    <div class="legend-item"><div class="legend-dot dot-district"></div> District</div>
+  </div>
+
+  <!-- DAY 1 -->
+  <div class="day-block">
+    <div class="day-header">
+      <div class="day-number">01</div>
+      <div class="day-info">
+        <div class="day-label">Day One</div>
+        <div class="day-title">Harajuku &amp; Takeshita Street</div>
+      </div>
+      <a class="map-btn" href="https://www.google.com/maps/dir/?api=1&origin=%26Here+SHINJUKU&destination=Kura+Sushi+Global+Flagship+Store+Harajuku&waypoints=Takeshita+Street%7CMarion+Crepes+Takeshita+Street%7CLONG%21LONGER%21%21LONGEST%21%21%21+Harajuku%7CLe+Shiner+Tokyo%7CYurinan+Harajuku%7CAFURI+Harajuku&travelmode=walking" target="_blank">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+        Open Map
+      </a>
+    </div>
+    <div class="stops">
+      <a class="stop" href="https://www.google.com/maps/search/&Here+SHINJUKU+Tokyo" target="_blank"><div class="stop-index">START</div><div class="stop-name">&amp;Here SHINJUKU</div><div class="stop-type">Starting Point</div><div class="stop-dot dot-district"></div></a>
+      <a class="stop" href="https://www.google.com/maps/search/Shinjuku+Station+Tokyo" target="_blank"><div class="stop-index">STOP 01</div><div class="stop-name">Shinjuku Station</div><div class="stop-type">Transport Hub</div><div class="stop-dot dot-district"></div></a>
+      <a class="stop" href="https://www.google.com/maps/search/Takeshita+Street+Harajuku+Tokyo" target="_blank"><div class="stop-index">STOP 02</div><div class="stop-name">Takeshita Street</div><div class="stop-type">Shopping · District</div><div class="stop-dot dot-shopping"></div></a>
+      <a class="stop" href="https://www.google.com/maps/search/Marion+Crepes+Takeshita+Street+Harajuku" target="_blank"><div class="stop-index">STOP 03</div><div class="stop-name">Marion Crepes</div><div class="stop-type">Food · Dessert</div><div class="stop-dot dot-food"></div></a>
+      <a class="stop" href="https://www.google.com/maps/search/LONG+LONGER+LONGEST+Harajuku+Tokyo" target="_blank"><div class="stop-index">STOP 04</div><div class="stop-name">LONG! LONGER!! LONGEST!!!</div><div class="stop-type">Food · Street Snack</div><div class="stop-dot dot-food"></div></a>
+      <a class="stop" href="https://www.google.com/maps/search/Le+Shiner+Tokyo+Harajuku" target="_blank"><div class="stop-index">STOP 05</div><div class="stop-name">Le Shiner Tokyo</div><div class="stop-type">Shopping · Fashion</div><div class="stop-dot dot-shopping"></div></a>
+      <a class="stop" href="https://www.google.com/maps/search/Yurinan+Harajuku+Tokyo" target="_blank"><div class="stop-index">STOP 06</div><div class="stop-name">Yurinan Harajuku</div><div class="stop-type">Food · Café</div><div class="stop-dot dot-food"></div></a>
+      <a class="stop" href="https://www.google.com/maps/search/AFURI+Harajuku+Tokyo" target="_blank"><div class="stop-index">STOP 07</div><div class="stop-name">AFURI Harajuku</div><div class="stop-type">Food · Ramen</div><div class="stop-dot dot-food"></div></a>
+      <a class="stop" href="https://www.google.com/maps/search/Kura+Sushi+Global+Flagship+Store+Harajuku+Tokyo" target="_blank"><div class="stop-index">END</div><div class="stop-name">Kura Sushi Global Flagship</div><div class="stop-type">Food · Sushi</div><div class="stop-dot dot-food"></div></a>
+    </div>
+  </div>
+
+  <!-- DAY 2 -->
+  <div class="day-block">
+    <div class="day-header">
+      <div class="day-number">02</div>
+      <div class="day-info">
+        <div class="day-label">Day Two</div>
+        <div class="day-title">Shibuya Crossing &amp; Beyond</div>
+      </div>
+      <a class="map-btn" href="https://www.google.com/maps/dir/?api=1&origin=%26Here+SHINJUKU&destination=Shibuya+Yokocho&waypoints=Shibuya+Crossing%7CGyukatsu+Motomura+Shibuya%7CICHIRAN+Shibuya+Jinnan%7CFlipper%27s+Shibuya%7CMEGA+Don+Quijote+Shibuya%7CAfuri+Shibuya+Dogenzaka&travelmode=walking" target="_blank">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+        Open Map
+      </a>
+    </div>
+    <div class="stops">
+      <a class="stop" href="https://www.google.com/maps/search/&Here+SHINJUKU+Tokyo" target="_blank"><div class="stop-index">START</div><div class="stop-name">&amp;Here SHINJUKU</div><div class="stop-type">Starting Point</div><div class="stop-dot dot-district"></div></a>
+      <a class="stop" href="https://www.google.com/maps/search/Shibuya+Crossing+Tokyo" target="_blank"><div class="stop-index">STOP 01</div><div class="stop-name">Shibuya Crossing</div><div class="stop-type">Attraction · Iconic</div><div class="stop-dot dot-attraction"></div></a>
+      <a class="stop" href="https://www.google.com/maps/search/Gyukatsu+Motomura+Shibuya+Tokyo" target="_blank"><div class="stop-index">STOP 02</div><div class="stop-name">Gyukatsu Motomura</div><div class="stop-type">Food · Beef Cutlet</div><div class="stop-dot dot-food"></div></a>
+      <a class="stop" href="https://www.google.com/maps/search/ICHIRAN+Shibuya+Jinnan+Tokyo" target="_blank"><div class="stop-index">STOP 03</div><div class="stop-name">ICHIRAN Shibuya Jinnan</div><div class="stop-type">Food · Ramen</div><div class="stop-dot dot-food"></div></a>
+      <a class="stop" href="https://www.google.com/maps/search/Flipper%27s+Shibuya+Tokyo" target="_blank"><div class="stop-index">STOP 04</div><div class="stop-name">Flipper's Shibuya</div><div class="stop-type">Food · Pancakes</div><div class="stop-dot dot-food"></div></a>
+      <a class="stop" href="https://www.google.com/maps/search/MEGA+Don+Quijote+Shibuya+Tokyo" target="_blank"><div class="stop-index">STOP 05</div><div class="stop-name">MEGA Don Quijote Shibuya</div><div class="stop-type">Shopping · Variety</div><div class="stop-dot dot-shopping"></div></a>
+      <a class="stop" href="https://www.google.com/maps/search/AFURI+Shibuya+Dogenzaka+Tokyo" target="_blank"><div class="stop-index">STOP 06</div><div class="stop-name">AFURI Shibuya Dogenzaka</div><div class="stop-type">Food · Ramen</div><div class="stop-dot dot-food"></div></a>
+      <a class="stop" href="https://www.google.com/maps/search/Shibuya+Yokocho+Tokyo" target="_blank"><div class="stop-index">END</div><div class="stop-name">Shibuya Yokocho</div><div class="stop-type">Food · Alley Bars</div><div class="stop-dot dot-food"></div></a>
+    </div>
+  </div>
+
+  <!-- DAY 3 -->
+  <div class="day-block">
+    <div class="day-header">
+      <div class="day-number">03</div>
+      <div class="day-info">
+        <div class="day-label">Day Three</div>
+        <div class="day-title">Memory Lane &amp; Kabukicho</div>
+      </div>
+      <a class="map-btn" href="https://www.google.com/maps/dir/?api=1&origin=%26Here+SHINJUKU&destination=Kabukicho&waypoints=Omoide+Yokocho&travelmode=walking" target="_blank">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+        Open Map
+      </a>
+    </div>
+    <div class="stops">
+      <a class="stop" href="https://www.google.com/maps/search/&Here+SHINJUKU+Tokyo" target="_blank"><div class="stop-index">START</div><div class="stop-name">&amp;Here SHINJUKU</div><div class="stop-type">Starting Point</div><div class="stop-dot dot-district"></div></a>
+      <a class="stop" href="https://www.google.com/maps/search/Omoide+Yokocho+Shinjuku+Tokyo" target="_blank"><div class="stop-index">STOP 01</div><div class="stop-name">Omoide Yokocho</div><div class="stop-type">Food · Alley · Memory Lane</div><div class="stop-dot dot-food"></div></a>
+      <a class="stop" href="https://www.google.com/maps/search/Kabukicho+Shinjuku+Tokyo" target="_blank"><div class="stop-index">END</div><div class="stop-name">Kabukicho</div><div class="stop-type">District · Nightlife</div><div class="stop-dot dot-district"></div></a>
+    </div>
+  </div>
+
+  <!-- DAY 4 -->
+  <div class="day-block">
+    <div class="day-header">
+      <div class="day-number">04</div>
+      <div class="day-info">
+        <div class="day-label">Day Four</div>
+        <div class="day-title">Old Tokyo · Asakusa</div>
+      </div>
+      <a class="map-btn" href="https://www.google.com/maps/dir/?api=1&origin=%26Here+SHINJUKU&destination=Asakusa&waypoints=Senso-ji+Temple%7CAsakusa+Gyukatsu&travelmode=walking" target="_blank">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+        Open Map
+      </a>
+    </div>
+    <div class="stops">
+      <a class="stop" href="https://www.google.com/maps/search/&Here+SHINJUKU+Tokyo" target="_blank"><div class="stop-index">START</div><div class="stop-name">&amp;Here SHINJUKU</div><div class="stop-type">Starting Point</div><div class="stop-dot dot-district"></div></a>
+      <a class="stop" href="https://www.google.com/maps/search/Senso-ji+Temple+Asakusa+Tokyo" target="_blank"><div class="stop-index">STOP 01</div><div class="stop-name">Senso-ji Temple</div><div class="stop-type">Attraction · Temple</div><div class="stop-dot dot-attraction"></div></a>
+      <a class="stop" href="https://www.google.com/maps/search/Asakusa+Gyukatsu+Tokyo" target="_blank"><div class="stop-index">STOP 02</div><div class="stop-name">Asakusa Gyukatsu</div><div class="stop-type">Food · Beef Cutlet</div><div class="stop-dot dot-food"></div></a>
+      <a class="stop" href="https://www.google.com/maps/search/Asakusa+Tokyo" target="_blank"><div class="stop-index">END</div><div class="stop-name">Asakusa</div><div class="stop-type">District · Historic</div><div class="stop-dot dot-district"></div></a>
+    </div>
+  </div>
+
+  <!-- DAY 5 -->
+  <div class="day-block">
+    <div class="day-header">
+      <div class="day-number">05</div>
+      <div class="day-info">
+        <div class="day-label">Day Five</div>
+        <div class="day-title">Akihabara &amp; teamLab</div>
+      </div>
+      <a class="map-btn" href="https://www.google.com/maps/dir/?api=1&origin=%26Here+SHINJUKU&destination=teamLab+Planets+TOKYO+DMM&waypoints=Akihabara+Electric+Town%7CYodobashi+Akiba&travelmode=walking" target="_blank">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+        Open Map
+      </a>
+    </div>
+    <div class="stops">
+      <a class="stop" href="https://www.google.com/maps/search/&Here+SHINJUKU+Tokyo" target="_blank"><div class="stop-index">START</div><div class="stop-name">&amp;Here SHINJUKU</div><div class="stop-type">Starting Point</div><div class="stop-dot dot-district"></div></a>
+      <a class="stop" href="https://www.google.com/maps/search/Akihabara+Electric+Town+Tokyo" target="_blank"><div class="stop-index">STOP 01</div><div class="stop-name">Akihabara Electric Town</div><div class="stop-type">Shopping · Electronics · Anime</div><div class="stop-dot dot-shopping"></div></a>
+      <a class="stop" href="https://www.google.com/maps/search/Yodobashi+Akiba+Akihabara+Tokyo" target="_blank"><div class="stop-index">STOP 02</div><div class="stop-name">Yodobashi Akiba</div><div class="stop-type">Shopping · Electronics</div><div class="stop-dot dot-shopping"></div></a>
+      <a class="stop" href="https://www.google.com/maps/search/teamLab+Planets+TOKYO+DMM" target="_blank"><div class="stop-index">END</div><div class="stop-name">teamLab Planets TOKYO</div><div class="stop-type">Attraction · Digital Art</div><div class="stop-dot dot-attraction"></div></a>
+    </div>
+  </div>
+
+  <!-- DAY 6 -->
+  <div class="day-block">
+    <div class="day-header">
+      <div class="day-number">06</div>
+      <div class="day-info">
+        <div class="day-label">Day Six</div>
+        <div class="day-title">Ginza, Roppongi &amp; Pizza</div>
+      </div>
+      <a class="map-btn" href="https://www.google.com/maps/dir/?api=1&origin=%26Here+SHINJUKU&destination=Roppongi&waypoints=Ginza%7CPST+Roppongi+Pizza+Studio+Tamaki%7CSavoy+Tomato+%26+Cheese%7CPizza+Sabasu%7CCoCo+Ichibanya+Minato+City+Aoyama&travelmode=walking" target="_blank">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+        Open Map
+      </a>
+    </div>
+    <div class="stops">
+      <a class="stop" href="https://www.google.com/maps/search/&Here+SHINJUKU+Tokyo" target="_blank"><div class="stop-index">START</div><div class="stop-name">&amp;Here SHINJUKU</div><div class="stop-type">Starting Point</div><div class="stop-dot dot-district"></div></a>
+      <a class="stop" href="https://www.google.com/maps/search/Ginza+Tokyo" target="_blank"><div class="stop-index">STOP 01</div><div class="stop-name">Ginza</div><div class="stop-type">District · Luxury Shopping</div><div class="stop-dot dot-shopping"></div></a>
+      <a class="stop" href="https://www.google.com/maps/search/PST+Roppongi+Pizza+Studio+Tamaki+Tokyo" target="_blank"><div class="stop-index">STOP 02</div><div class="stop-name">PST Roppongi Pizza Studio Tamaki</div><div class="stop-type">Food · Pizza</div><div class="stop-dot dot-food"></div></a>
+      <a class="stop" href="https://www.google.com/maps/search/Savoy+Tomato+Cheese+Tokyo" target="_blank"><div class="stop-index">STOP 03</div><div class="stop-name">Savoy Tomato &amp; Cheese</div><div class="stop-type">Food · Pizza</div><div class="stop-dot dot-food"></div></a>
+      <a class="stop" href="https://www.google.com/maps/search/Pizza+Sabasu+Tokyo" target="_blank"><div class="stop-index">STOP 04</div><div class="stop-name">Pizza Sabasu</div><div class="stop-type">Food · Pizza</div><div class="stop-dot dot-food"></div></a>
+      <a class="stop" href="https://www.google.com/maps/search/CoCo+Ichibanya+Minato+Aoyama+Tokyo" target="_blank"><div class="stop-index">STOP 05</div><div class="stop-name">CoCo Ichibanya Aoyama</div><div class="stop-type">Food · Curry</div><div class="stop-dot dot-food"></div></a>
+      <a class="stop" href="https://www.google.com/maps/search/Roppongi+Tokyo" target="_blank"><div class="stop-index">END</div><div class="stop-name">Roppongi</div><div class="stop-type">District · Arts &amp; Nightlife</div><div class="stop-dot dot-district"></div></a>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <p>All routes depart from <strong>Shinjuku</strong> · Open Google Maps links for navigation · 東京 2025</p>
+</footer>
+
+<script>
+  // Intersection observer for scroll-in animations
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        // Stagger children
+        const stops = e.target.querySelectorAll('.stop');
+        stops.forEach((s, i) => {
+          s.style.transitionDelay = `${i * 0.05}s`;
+          s.style.opacity = '0';
+          s.style.transform = 'translateY(10px)';
+          s.style.transition = 'opacity 0.4s ease, transform 0.4s ease, background 0.2s';
+          requestAnimationFrame(() => {
+            setTimeout(() => {
+              s.style.opacity = '1';
+              s.style.transform = 'none';
+            }, i * 60 + 200);
+          });
+        });
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.day-block').forEach(b => observer.observe(b));
+</script>
+</body>
+</html>
