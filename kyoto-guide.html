@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kyoto – Two Days from Namba</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Noto+Serif+JP:wght@300;400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:    #1a1208;
+  --paper:  #f5f0e8;
+  --deep:   #2c1f10;
+  --matcha: #5a7a4a;
+  --matcha2:#8aac6e;
+  --red:    #c94f2a;
+  --gold:   #c8973a;
+  --mist:   #d4cfc4;
+  --stone:  #8a8070;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);font-family:'Cormorant Garamond','Noto Serif JP',serif;overflow-x:hidden}
+
+/* ── HERO ── */
+.hero{position:relative;height:100vh;min-height:580px;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;background:var(--deep)}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 40%,rgba(90,122,74,.18) 0%,transparent 70%),radial-gradient(ellipse 60% 80% at 80% 80%,rgba(201,79,42,.12) 0%,transparent 60%),radial-gradient(ellipse 40% 60% at 10% 60%,rgba(200,151,58,.10) 0%,transparent 50%)}
+.hero-noise{position:absolute;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.045'/%3E%3C/svg%3E");opacity:.5;mix-blend-mode:overlay}
+.hero-torii{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:320px;opacity:.1}
+.hero-content{position:relative;z-index:2;text-align:center;padding:0 24px}
+.h-base{display:inline-flex;align-items:center;gap:8px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);border:1px solid rgba(200,151,58,.35);padding:7px 16px;margin-bottom:22px;opacity:0;animation:fadeUp 1s .1s forwards}
+.h-jp{font-family:'Noto Serif JP',serif;font-size:clamp(12px,1.8vw,15px);font-weight:300;letter-spacing:.5em;color:var(--matcha2);margin-bottom:14px;opacity:0;animation:fadeUp 1s .3s forwards}
+.h-title{font-size:clamp(52px,12vw,118px);font-weight:300;font-style:italic;letter-spacing:-.02em;line-height:.9;color:var(--paper);margin-bottom:16px;opacity:0;animation:fadeUp 1s .5s forwards}
+.h-sub{font-size:clamp(10px,1.5vw,12px);font-family:'DM Mono',monospace;letter-spacing:.3em;color:var(--stone);text-transform:uppercase;margin-bottom:38px;opacity:0;animation:fadeUp 1s .7s forwards}
+.h-pills{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;opacity:0;animation:fadeUp 1s .9s forwards}
+.pill{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;padding:10px 22px;border:1px solid rgba(245,240,232,.2);color:var(--paper);text-decoration:none;transition:all .3s}
+.pill:hover{background:rgba(245,240,232,.08);border-color:rgba(245,240,232,.5)}
+.h-scroll{position:absolute;bottom:30px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:8px;opacity:0;animation:fadeIn 1s 1.5s forwards;color:var(--stone);font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.2em;text-transform:uppercase}
+.scroll-bar{width:1px;height:36px;background:var(--stone);animation:pulse 2s 1.5s infinite}
+
+/* ── HOTEL BANNER ── */
+.hotel-banner{max-width:1100px;margin:0 auto;padding:64px 40px 0;display:flex;align-items:center;gap:14px}
+.hbadge{display:inline-flex;align-items:center;gap:8px;background:var(--deep);color:var(--gold);font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;padding:9px 16px}
+.harrow{color:var(--stone);font-size:20px;line-height:1}
+
+/* ── SECTION HEADER ── */
+.sec-head{padding:18px 40px 0;max-width:1100px;margin:0 auto}
+.day-tag{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.4em;text-transform:uppercase;color:var(--red);margin-bottom:12px;display:flex;align-items:center;gap:14px}
+.day-tag::after{content:'';flex:1;height:1px;background:var(--mist);max-width:56px}
+a.title-link{display:inline-block;text-decoration:none;color:inherit;transition:opacity .2s;margin-bottom:8px}
+a.title-link:hover{opacity:.7}
+.day-h{font-size:clamp(28px,5vw,58px);font-weight:300;font-style:italic;line-height:1.1}
+.day-h .arr{font-size:.38em;vertical-align:super;font-style:normal;opacity:.35;margin-left:3px}
+.day-hint{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.1em;color:var(--stone);margin-bottom:30px}
+
+/* ── GRID ── */
+.grid{padding:0 40px 52px;max-width:1100px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(282px,1fr));gap:2px}
+.card{background:#fff;padding:22px 22px 18px;position:relative;border:1px solid transparent;opacity:0;transform:translateY(16px);animation:reveal .55s forwards;transition:transform .3s,box-shadow .3s}
+.card:hover{z-index:2;transform:translateY(-3px);box-shadow:0 10px 36px rgba(26,18,8,.11);border-color:var(--mist)}
+.card:nth-child(1){animation-delay:.04s}.card:nth-child(2){animation-delay:.08s}.card:nth-child(3){animation-delay:.12s}
+.card:nth-child(4){animation-delay:.16s}.card:nth-child(5){animation-delay:.20s}.card:nth-child(6){animation-delay:.24s}
+.card:nth-child(7){animation-delay:.28s}.card:nth-child(8){animation-delay:.32s}.card:nth-child(9){animation-delay:.36s}
+
+.cnum{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.2em;color:var(--mist);margin-bottom:8px}
+.cnum.gold{color:var(--gold)}
+.ctag{display:inline-block;font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.16em;text-transform:uppercase;padding:3px 8px;border-radius:2px;margin-bottom:8px}
+.t-hotel {background:rgba(200,151,58,.14);color:#a07520}
+.t-nature {background:rgba(90,122,74,.10); color:var(--matcha)}
+.t-temple {background:rgba(90,122,74,.10); color:var(--matcha)}
+.t-shrine {background:rgba(201,79,42,.09); color:var(--red)}
+.t-food   {background:rgba(200,151,58,.12);color:var(--gold)}
+.t-ramen  {background:rgba(201,79,42,.09); color:var(--red)}
+.t-cafe   {background:rgba(138,128,112,.12);color:var(--stone)}
+
+a.card-link{text-decoration:none;color:inherit;display:block}
+a.card-link .cname::after{content:' ↗';font-size:.52em;vertical-align:super;opacity:.25;font-family:'DM Mono',monospace;font-style:normal;transition:opacity .2s}
+a.card-link:hover .cname::after{opacity:.65}
+a.card-link:hover .cname{text-decoration:underline;text-decoration-color:var(--mist);text-underline-offset:3px}
+.cname{font-size:clamp(16px,2vw,20px);font-weight:400;line-height:1.2;margin-bottom:4px}
+.cjp  {font-family:'Noto Serif JP',serif;font-size:11px;font-weight:300;color:var(--stone);margin-bottom:8px}
+.chrs {font-family:'DM Mono',monospace;font-size:10px;color:var(--stone);letter-spacing:.03em;margin-bottom:7px}
+.crat {display:flex;align-items:center;gap:6px;font-family:'DM Mono',monospace;font-size:10px;color:var(--stone)}
+.stars{display:flex;gap:2px}
+.s   {width:8px;height:8px;background:var(--gold);clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}
+.s.e {background:var(--mist)}
+.cdesc{font-size:13px;line-height:1.65;color:var(--stone);font-style:italic;margin-top:10px;padding-top:10px;border-top:1px solid var(--mist)}
+.bar{position:absolute;top:0;left:0;width:3px;height:100%}
+.b-gold   {background:var(--gold)}
+.b-matcha {background:var(--matcha)}
+.b-matcha2{background:var(--matcha2)}
+.b-red    {background:var(--red)}
+.b-stone  {background:var(--stone)}
+
+/* ── DIVIDER ── */
+.divider{max-width:1100px;margin:0 auto;padding:14px 40px 0;display:flex;align-items:center;gap:22px}
+.dline  {flex:1;height:1px;background:linear-gradient(to right,var(--mist),transparent)}
+.dline.r{background:linear-gradient(to left,var(--mist),transparent)}
+.dicon  {font-family:'Noto Serif JP',serif;font-size:17px;color:var(--matcha)}
+
+/* ── MAP CTA ── */
+.map-cta{max-width:1100px;margin:0 auto;padding:0 40px 52px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.mbtn{display:inline-flex;align-items:center;gap:9px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--paper);background:var(--ink);padding:12px 24px;text-decoration:none;border:1px solid var(--ink);transition:all .3s}
+.mbtn:hover{background:transparent;color:var(--ink)}
+.mbtn svg{transition:transform .3s}
+.mbtn:hover svg{transform:translateX(3px)}
+.mnote{font-family:'DM Mono',monospace;font-size:10px;color:var(--stone);letter-spacing:.06em}
+
+/* ── FOOTER ── */
+footer{background:var(--deep);color:var(--stone);padding:44px 40px;text-align:center}
+footer .fjp{font-family:'Noto Serif JP',serif;font-size:26px;font-weight:300;color:rgba(245,240,232,.1);letter-spacing:.4em;margin-bottom:10px}
+footer p{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:.3em;text-transform:uppercase}
+
+@keyframes fadeUp {from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn {from{opacity:0}to{opacity:1}}
+@keyframes pulse  {0%,100%{transform:scaleY(1);opacity:1}50%{transform:scaleY(.55);opacity:.4}}
+@keyframes reveal {to{opacity:1;transform:translateY(0)}}
+
+@media(max-width:600px){
+  .sec-head,.map-cta,.hotel-banner,.divider{padding-left:20px;padding-right:20px}
+  .grid{padding-left:20px;padding-right:20px;grid-template-columns:1fr}
+  .map-cta{flex-direction:column;align-items:flex-start}
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero" id="top">
+  <div class="hero-bg"></div>
+  <div class="hero-noise"></div>
+  <svg class="hero-torii" viewBox="0 0 340 320" fill="none">
+    <rect x="20"  y="60"  width="300" height="16" rx="8" fill="#c94f2a"/>
+    <rect x="0"   y="90"  width="340" height="10" rx="5" fill="#c94f2a"/>
+    <rect x="58"  y="100" width="14"  height="220" rx="7" fill="#c94f2a"/>
+    <rect x="268" y="100" width="14"  height="220" rx="7" fill="#c94f2a"/>
+    <rect x="40"  y="54"  width="30"  height="8"   rx="4" fill="#a03520"/>
+    <rect x="270" y="54"  width="30"  height="8"   rx="4" fill="#a03520"/>
+    <rect x="0"   y="82"  width="40"  height="8"   rx="4" fill="#a03520"/>
+    <rect x="300" y="82"  width="40"  height="8"   rx="4" fill="#a03520"/>
+  </svg>
+  <div class="hero-content">
+    <div class="h-base">⌂ Hotel Keihan Namba Grande · Osaka</div>
+    <p class="h-jp">京都の旅 — 二日間の記録</p>
+    <h1 class="h-title">Kyoto</h1>
+    <p class="h-sub">A Two-Day Curated Journey from Namba</p>
+    <div class="h-pills">
+      <a class="pill" href="#day1">Day 1 — West &amp; South</a>
+      <a class="pill" href="#day2">Day 2 — East Kyoto</a>
+    </div>
+  </div>
+  <div class="h-scroll"><div class="scroll-bar"></div><span>Scroll</span></div>
+</section>
+
+
+<!-- ══════════════════════════════════════════
+     DAY 1
+     Origin:      Hotel Keihan Namba Grande
+     Destination: eggslut Kyoto Shijo
+     Waypoints:   Arashiyama → Daigo-ji → Benten-do → Fushimi Inari → Kyoto Engine Ramen → Daniel's Sole
+══════════════════════════════════════════ -->
+<section id="day1">
+
+  <div class="hotel-banner">
+    <div class="hbadge">⌂ Hotel Keihan Namba Grande</div>
+    <span class="harrow">→</span>
+  </div>
+
+  <div class="sec-head">
+    <div class="day-tag">Day 01 · West → South Kyoto</div>
+    <a class="title-link"
+       href="https://www.google.com/maps/dir/?api=1&travelmode=transit&origin=Hotel+Keihan+Namba+Grande%2C+2-11-13+Nanbanaka%2C+Naniwa+Ward%2C+Osaka&destination=eggslut+%E4%BA%AC%E9%83%BD%E5%9B%9B%E6%9D%A1%E5%BA%97%2C+Kyoto&waypoints=Arashiyama+Bamboo+Forest%2C+Kyoto%7CDaigo-ji%2C+Kyoto%7CBentendo+Temple%2C+Fushimi%2C+Kyoto%7CFushimi+Inari+Taisha%2C+Kyoto%7CKYOTO+ENGINE+RAMEN%2C+Nakagyo+Ward%2C+Kyoto%7CDaniel%27s+Sole%2C+Nakagyo+Ward%2C+Kyoto"
+       target="_blank">
+      <h2 class="day-h">Bamboo, Gates &amp; Ramen<span class="arr">↗</span></h2>
+    </a>
+    <p class="day-hint">Tap title to open full route in Google Maps · 7 stops · transit + walking</p>
+  </div>
+
+  <div class="grid">
+
+    <!-- HOTEL -->
+    <div class="card">
+      <div class="bar b-gold"></div>
+      <a class="card-link" href="https://www.google.com/maps/search/Hotel+Keihan+Namba+Grande,+Osaka" target="_blank">
+      <div class="cnum gold">Start · Hotel</div>
+      <span class="ctag t-hotel">Base</span>
+      <h3 class="cname">Hotel Keihan Namba Grande</h3>
+      <p class="cjp">ホテル京阪 なんばグランデ</p>
+      <p class="chrs">⌂ Namba, Osaka</p>
+      <div class="crat"><div class="stars"><div class="s"></div><div class="s"></div><div class="s"></div><div class="s"></div><div class="s e"></div></div>4.4 · 704 reviews</div>
+      <p class="cdesc">Your base in the heart of Namba. Head out early — Kyoto is ~30 min by Shinkansen or ~75 min by Kintetsu limited express from Osaka-Namba Station.</p>
+      </a>
+    </div>
+
+    <!-- 01 -->
+    <div class="card">
+      <div class="bar b-matcha2"></div>
+      <a class="card-link" href="https://www.google.com/maps/search/Arashiyama+Bamboo+Forest,+Kyoto" target="_blank">
+      <div class="cnum">01</div>
+      <span class="ctag t-nature">Nature</span>
+      <h3 class="cname">Arashiyama Bamboo Forest</h3>
+      <p class="cjp">嵐山竹林の小径</p>
+      <p class="chrs">⏰ Open 24 hours</p>
+      <div class="crat"><div class="stars"><div class="s"></div><div class="s"></div><div class="s"></div><div class="s"></div><div class="s e"></div></div>4.3 · 21k reviews</div>
+      <p class="cdesc">A cathedral of towering stalks — arrive before 8 am for near-solitude. The bamboo sways and hushes the entire city behind you.</p>
+      </a>
+    </div>
+
+    <!-- 02 -->
+    <div class="card">
+      <div class="bar b-matcha"></div>
+      <a class="card-link" href="https://www.google.com/maps/search/Daigo-ji,+Fushimi,+Kyoto" target="_blank">
+      <div class="cnum">02</div>
+      <span class="ctag t-temple">Temple</span>
+      <h3 class="cname">Daigo-ji</h3>
+      <p class="cjp">醍醐寺</p>
+      <p class="chrs">⏰ 9:00 AM – 4:30 PM</p>
+      <div class="crat"><div class="stars"><div class="s"></div><div class="s"></div><div class="s"></div><div class="s"></div><div class="s e"></div></div>4.4 · 5.6k reviews</div>
+      <p class="cdesc">A UNESCO complex with a five-story pagoda and mossy stone paths. The pond reflects maple trees in autumn like a painted scroll.</p>
+      </a>
+    </div>
+
+    <!-- 03 -->
+    <div class="card">
+      <div class="bar b-matcha"></div>
+      <a class="card-link" href="https://www.google.com/maps/search/Bentendo+Temple+Daigo-ji+Kyoto" target="_blank">
+      <div class="cnum">03</div>
+      <span class="ctag t-temple">Temple</span>
+      <h3 class="cname">Benten-dō</h3>
+      <p class="cjp">弁天堂 · 醍醐寺</p>
+      <p class="chrs">⏰ Within Daigo-ji grounds</p>
+      <div class="crat"><div class="stars"><div class="s"></div><div class="s"></div><div class="s"></div><div class="s"></div><div class="s e"></div></div>4.4 · 128 reviews</div>
+      <p class="cdesc">The iconic island pavilion hidden among waterfalls and a looping forest path. Perfectly serene in the early morning before crowds arrive.</p>
+      </a>
+    </div>
+
+    <!-- 04 -->
+    <div class="card">
+      <div class="bar b-red"></div>
+      <a class="card-link" href="https://www.google.com/maps/search/Fushimi+Inari+Taisha,+Kyoto" target="_blank">
+      <div class="cnum">04</div>
+      <span class="ctag t-shrine">Shrine</span>
+      <h3 class="cname">Fushimi Inari Taisha</h3>
+      <p class="cjp">伏見稲荷大社</p>
+      <p class="chrs">⏰ Open 24 hours</p>
+      <div class="crat"><div class="stars"><div class="s"></div><div class="s"></div><div class="s"></div><div class="s"></div><div class="s"></div></div>4.6 · 85k reviews</div>
+      <p class="cdesc">Thousands of vermillion torii gates spiraling up the mountain. Go at dusk or late evening for a completely different, haunting atmosphere.</p>
+      </a>
+    </div>
+
+    <!-- 05 -->
+    <div class="card">
+      <div class="bar b-red"></div>
+      <a class="card-link" href="https://www.google.com/maps/search/KYOTO+ENGINE+RAMEN,+Nakagyo,+Kyoto" target="_blank">
+      <div class="cnum">05 · Lunch</div>
+      <span class="ctag t-ramen">Ramen</span>
+      <h3 class="cname">Kyoto Engine Ramen</h3>
+      <p class="cjp">京都エンジンラーメン</p>
+      <p class="chrs">⏰ 12:00 PM – 10:30 PM</p>
+      <div class="crat"><div class="stars"><div class="s"></div><div class="s"></div><div class="s"></div><div class="s"></div><div class="s"></div></div>4.5 · 3.8k reviews</div>
+      <p class="cdesc">Rich, deep-flavored broth with vegan and gluten-free options. Located in a covered arcade district — popular for very good reason.</p>
+      </a>
+    </div>
+
+    <!-- 06 -->
+    <div class="card">
+      <div class="bar b-gold"></div>
+      <a class="card-link" href="https://www.google.com/maps/search/Daniel%27s+Sole+Pizza,+Nakagyo,+Kyoto" target="_blank">
+      <div class="cnum">06 · Dinner</div>
+      <span class="ctag t-food">Italian</span>
+      <h3 class="cname">Daniel's Sole Pizza</h3>
+      <p class="cjp">ダニエルズ ソール</p>
+      <p class="chrs">⏰ 11:30 AM – 10:00 PM · closed Wed</p>
+      <div class="crat"><div class="stars"><div class="s"></div><div class="s"></div><div class="s"></div><div class="s"></div><div class="s e"></div></div>4.1 · 645 reviews</div>
+      <p class="cdesc">Authentic Neapolitan pizza in a cozy Kyoto corner. Fresh pasta made daily; the steak earns particular praise from regulars.</p>
+      </a>
+    </div>
+
+    <!-- 07 FINISH -->
+    <div class="card">
+      <div class="bar b-gold"></div>
+      <a class="card-link" href="https://www.google.com/maps/search/eggslut+%E4%BA%AC%E9%83%BD%E5%9B%9B%E6%9D%A1%E5%BA%97" target="_blank">
+      <div class="cnum">07 · Finish</div>
+      <span class="ctag t-food">Brunch</span>
+      <h3 class="cname">Eggslut</h3>
+      <p class="cjp">eggslut 京都四条店</p>
+      <p class="chrs">⏰ 8:00 AM – 8:00 PM</p>
+      <div class="crat"><div class="stars"><div class="s"></div><div class="s"></div><div class="s"></div><div class="s"></div><div class="s e"></div></div>4.2 · 99 reviews</div>
+      <p class="cdesc">Brioche egg sandwiches and crispy hash browns across three spacious floors. A rare quality Western brunch stop in central Kyoto.</p>
+      </a>
+    </div>
+
+  </div>
+
+  <div class="map-cta">
+    <a class="mbtn"
+       href="https://www.google.com/maps/dir/?api=1&travelmode=transit&origin=Hotel+Keihan+Namba+Grande%2C+2-11-13+Nanbanaka%2C+Naniwa+Ward%2C+Osaka&destination=eggslut+%E4%BA%AC%E9%83%BD%E5%9B%9B%E6%9D%A1%E5%BA%97%2C+Kyoto&waypoints=Arashiyama+Bamboo+Forest%2C+Kyoto%7CDaigo-ji%2C+Kyoto%7CBentendo+Temple%2C+Fushimi%2C+Kyoto%7CFushimi+Inari+Taisha%2C+Kyoto%7CKYOTO+ENGINE+RAMEN%2C+Nakagyo+Ward%2C+Kyoto%7CDaniel%27s+Sole%2C+Nakagyo+Ward%2C+Kyoto"
+       target="_blank">
+      <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 1L13 7M13 7L7 13M13 7H1" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+      Open Day 1 in Maps
+    </a>
+    <span class="mnote">Namba → Arashiyama → Daigo-ji → Fushimi Inari → Central Kyoto</span>
+  </div>
+
+</section>
+
+
+<!-- DIVIDER -->
+<div class="divider">
+  <div class="dline"></div>
+  <div class="dicon">🌿</div>
+  <div class="dline r"></div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     DAY 2
+     Origin:      Hotel Keihan Namba Grande
+     Destination: MACCHA HOUSE Kyoto Gion Shijo
+     Waypoints:   Nanzen-ji → Kiyomizu-dera → Hokan-ji → Yasaka Koshin-do → Starbucks Ninenzaka
+══════════════════════════════════════════ -->
+<section id="day2">
+
+  <div class="hotel-banner">
+    <div class="hbadge">⌂ Hotel Keihan Namba Grande</div>
+    <span class="harrow">→</span>
+  </div>
+
+  <div class="sec-head">
+    <div class="day-tag">Day 02 · East Kyoto · Higashiyama Walk</div>
+    <a class="title-link"
+       href="https://www.google.com/maps/dir/?api=1&travelmode=transit&origin=Hotel+Keihan+Namba+Grande%2C+2-11-13+Nanbanaka%2C+Naniwa+Ward%2C+Osaka&destination=MACCHA+HOUSE+%E6%8A%B9%E8%8C%B6%E9%A4%A8+%E4%BA%AC%E9%83%BD%E7%A5%87%E5%9C%92%E5%9B%9B%E6%9D%A1%2C+Kyoto&waypoints=Nanzen-ji%2C+Sakyo+Ward%2C+Kyoto%7CKiyomizu-dera%2C+Higashiyama+Ward%2C+Kyoto%7CHokan-ji+Temple+Yasaka+Pagoda%2C+Kyoto%7CYasaka+Koshin-do+Temple%2C+Higashiyama%2C+Kyoto%7CStarbucks+Coffee+Kyoto+Ninenzaka+Yasaka+Chaya"
+       target="_blank">
+      <h2 class="day-h">Pagodas, Incense &amp; Matcha<span class="arr">↗</span></h2>
+    </a>
+    <p class="day-hint">Tap title to open full route in Google Maps · 6 stops · transit + walking</p>
+  </div>
+
+  <div class="grid">
+
+    <!-- HOTEL -->
+    <div class="card">
+      <div class="bar b-gold"></div>
+      <a class="card-link" href="https://www.google.com/maps/search/Hotel+Keihan+Namba+Grande,+Osaka" target="_blank">
+      <div class="cnum gold">Start · Hotel</div>
+      <span class="ctag t-hotel">Base</span>
+      <h3 class="cname">Hotel Keihan Namba Grande</h3>
+      <p class="cjp">ホテル京阪 なんばグランデ</p>
+      <p class="chrs">⌂ Namba, Osaka</p>
+      <div class="crat"><div class="stars"><div class="s"></div><div class="s"></div><div class="s"></div><div class="s"></div><div class="s e"></div></div>4.4 · 704 reviews</div>
+      <p class="cdesc">Head to Kyoto again — today is a slower, more meditative day along the Higashiyama ridge. Take the train to Keage or Higashiyama Station.</p>
+      </a>
+    </div>
+
+    <!-- 01 -->
+    <div class="card">
+      <div class="bar b-matcha"></div>
+      <a class="card-link" href="https://www.google.com/maps/search/Nanzen-ji,+Sakyo,+Kyoto" target="_blank">
+      <div class="cnum">01</div>
+      <span class="ctag t-temple">Temple</span>
+      <h3 class="cname">Nanzen-ji</h3>
+      <p class="cjp">南禅寺</p>
+      <p class="chrs">⏰ 8:40 AM – 4:30 PM</p>
+      <div class="crat"><div class="stars"><div class="s"></div><div class="s"></div><div class="s"></div><div class="s"></div><div class="s"></div></div>4.5 · 12k reviews</div>
+      <p class="cdesc">A great Zen complex at the foot of the Higashiyama mountains. The brick Meiji-era aqueduct threading through ancient temple grounds is strangely beautiful.</p>
+      </a>
+    </div>
+
+    <!-- 02 -->
+    <div class="card">
+      <div class="bar b-matcha"></div>
+      <a class="card-link" href="https://www.google.com/maps/search/Kiyomizu-dera,+Higashiyama,+Kyoto" target="_blank">
+      <div class="cnum">02</div>
+      <span class="ctag t-temple">Temple</span>
+      <h3 class="cname">Kiyomizu-dera Temple</h3>
+      <p class="cjp">清水寺</p>
+      <p class="chrs">⏰ 6:00 AM – 6:00 PM</p>
+      <div class="crat"><div class="stars"><div class="s"></div><div class="s"></div><div class="s"></div><div class="s"></div><div class="s"></div></div>4.6 · 67k reviews</div>
+      <p class="cdesc">UNESCO-listed. A wooden stage built without nails over the hillside — sweeping views of Kyoto spread endlessly below. Visit at opening for silence.</p>
+      </a>
+    </div>
+
+    <!-- 03 -->
+    <div class="card">
+      <div class="bar b-matcha"></div>
+      <a class="card-link" href="https://www.google.com/maps/search/Hokan-ji+Temple+Yasaka+Pagoda,+Kyoto" target="_blank">
+      <div class="cnum">03</div>
+      <span class="ctag t-temple">Pagoda</span>
+      <h3 class="cname">Hōkan-ji Temple</h3>
+      <p class="cjp">法観寺 · 八坂の塔</p>
+      <p class="chrs">⏰ Interior Sat–Sun · always visible outside</p>
+      <div class="crat"><div class="stars"><div class="s"></div><div class="s"></div><div class="s"></div><div class="s"></div><div class="s"></div></div>4.6 · 5.4k reviews</div>
+      <p class="cdesc">The five-story pagoda that defines Kyoto's skyline. The narrow stone lane below at sunset is one of Japan's most-photographed streets.</p>
+      </a>
+    </div>
+
+    <!-- 04 -->
+    <div class="card">
+      <div class="bar b-matcha"></div>
+      <a class="card-link" href="https://www.google.com/maps/search/Yasaka+Koshin-do+Temple,+Higashiyama,+Kyoto" target="_blank">
+      <div class="cnum">04</div>
+      <span class="ctag t-temple">Temple</span>
+      <h3 class="cname">Yasaka Kōshin-dō</h3>
+      <p class="cjp">八坂庚申堂</p>
+      <p class="chrs">⏰ 9:00 AM – 5:00 PM</p>
+      <div class="crat"><div class="stars"><div class="s"></div><div class="s"></div><div class="s"></div><div class="s"></div><div class="s e"></div></div>4.3 · 2.6k reviews</div>
+      <p class="cdesc">Hundreds of round tied cloth balls covering every surface in vivid color. A burst of joy hidden in Higashiyama's quiet lanes — don't skip it.</p>
+      </a>
+    </div>
+
+    <!-- 05 -->
+    <div class="card">
+      <div class="bar b-stone"></div>
+      <a class="card-link" href="https://www.google.com/maps/search/Starbucks+Coffee+Kyoto+Ninenzaka+Yasaka+Chaya" target="_blank">
+      <div class="cnum">05 · Coffee</div>
+      <span class="ctag t-cafe">Café</span>
+      <h3 class="cname">Starbucks Ninenzaka</h3>
+      <p class="cjp">スターバックス 京都二寧坂ヤサカ茶屋店</p>
+      <p class="chrs">⏰ 8:00 AM – 8:00 PM</p>
+      <div class="crat"><div class="stars"><div class="s"></div><div class="s"></div><div class="s"></div><div class="s"></div><div class="s e"></div></div>4.4 · 6k reviews</div>
+      <p class="cdesc">A 100-year-old machiya townhouse with tatami seating and no Starbucks sign on the door. Widely regarded as the most beautiful Starbucks in the world.</p>
+      </a>
+    </div>
+
+    <!-- 06 FINISH -->
+    <div class="card">
+      <div class="bar b-stone"></div>
+      <a class="card-link" href="https://www.google.com/maps/search/MACCHA+HOUSE+%E6%8A%B9%E8%8C%B6%E9%A4%A8+%E4%BA%AC%E9%83%BD%E7%A5%87%E5%9C%92%E5%9B%9B%E6%9D%A1" target="_blank">
+      <div class="cnum">06 · Finish</div>
+      <span class="ctag t-cafe">Matcha Café</span>
+      <h3 class="cname">MACCHA HOUSE</h3>
+      <p class="cjp">抹茶館 京都祇園四条</p>
+      <p class="chrs">⏰ 11:00 AM – 8:00 PM</p>
+      <div class="crat"><div class="stars"><div class="s"></div><div class="s"></div><div class="s"></div><div class="s"></div><div class="s e"></div></div>4.1 · 116 reviews</div>
+      <p class="cdesc">End the day with a matcha tiramisu made from high-grade Uji matcha. Silky cream, real bitterness. A perfect Kyoto farewell.</p>
+      </a>
+    </div>
+
+  </div>
+
+  <div class="map-cta">
+    <a class="mbtn"
+       href="https://www.google.com/maps/dir/?api=1&travelmode=transit&origin=Hotel+Keihan+Namba+Grande%2C+2-11-13+Nanbanaka%2C+Naniwa+Ward%2C+Osaka&destination=MACCHA+HOUSE+%E6%8A%B9%E8%8C%B6%E9%A4%A8+%E4%BA%AC%E9%83%BD%E7%A5%87%E5%9C%92%E5%9B%9B%E6%9D%A1%2C+Kyoto&waypoints=Nanzen-ji%2C+Sakyo+Ward%2C+Kyoto%7CKiyomizu-dera%2C+Higashiyama+Ward%2C+Kyoto%7CHokan-ji+Temple+Yasaka+Pagoda%2C+Kyoto%7CYasaka+Koshin-do+Temple%2C+Higashiyama%2C+Kyoto%7CStarbucks+Coffee+Kyoto+Ninenzaka+Yasaka+Chaya"
+       target="_blank">
+      <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><path d="M7 1L13 7M13 7L7 13M13 7H1" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+      Open Day 2 in Maps
+    </a>
+    <span class="mnote">Namba → Nanzen-ji → Kiyomizu-dera → Higashiyama → Gion</span>
+  </div>
+
+</section>
+
+
+<!-- FOOTER -->
+<footer>
+  <p class="fjp">京 都</p>
+  <p>Two Days in Kyoto · Starting from Hotel Keihan Namba Grande</p>
+</footer>
+
+</body>
+</html>
